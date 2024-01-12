@@ -6,7 +6,6 @@ import { is_valid_file } from "../utils/precatch.js"
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!!req.url) {
         const path = req.url.split("/").filter((r) => !!r)
-        const matrix_url = await get_matrix_url()
 
         // /xxx.m3u
         if (path.length === 1 && /\.m3u$/.test(path[0])) {
@@ -14,7 +13,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 return res.status(404).send("not found")
             }
 
-            return res.redirect(`${matrix_url}/${path[0]}`)
+            return res.redirect(await get_matrix_url(`/${path[0]}`))
         }
 
         // /txt/xxx.txt
@@ -23,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 return res.status(404).send("not found")
             }
 
-            return res.redirect(`${matrix_url}/txt/${path[1]}`)
+            return res.redirect(await get_matrix_url(`/txt/${path[1]}`))
         }
 
         // /epg/xxx.xml
@@ -31,7 +30,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             if (!is_valid_file(path[1], "epg")) {
                 return res.status(404).send("not found")
             }
-            return res.redirect(`${matrix_url}/epg/${path[1]}`)
+            return res.redirect(await get_matrix_url(`/epg/${path[1]}`))
         }
 
         return res.status(404).send("not found")

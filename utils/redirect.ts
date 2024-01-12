@@ -12,22 +12,24 @@ import { matrix_urls } from "./const.js"
 // }
 
 // 转发策略
-const matrix_speed_test = async () => {
+const matrix_speed_test = async (relative_path: string) => {
     try {
         const url = await Promise.any(
             matrix_urls.map(async (u) =>
-                axios.get(`${u}/channels.json`).then(() => u)
+                axios
+                    .get(`${u}${relative_path}`)
+                    .then(() => `${u}${relative_path}`)
             )
         )
 
         return url
     } catch (e) {
         // 全挂摆烂兜底
-        return "https://m3u.ibert.me"
+        return `https://m3u.ibert.me${relative_path}`
     }
 }
 
-export const get_matrix_url = async () => {
+export const get_matrix_url = async (relative_path: string) => {
     // if (!fs.existsSync(records_p)) {
     //     fs.mkdirSync(records_p)
     // }
@@ -44,7 +46,7 @@ export const get_matrix_url = async () => {
     //     }
     // }
 
-    return matrix_speed_test().then((url) => {
+    return matrix_speed_test(relative_path).then((url) => {
         // fs.writeFileSync(
         //     target,
         //     JSON.stringify({
