@@ -1,0 +1,14 @@
+{
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/api"
+        }
+    ],
+    "redirects": [
+        {
+            "source": "/",
+            "destination": "https://m3u.ibert.me"
+        }
+    ]
+}
